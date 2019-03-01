@@ -1,7 +1,5 @@
 ffbutil
 ====
-
-Overview
 This is the utility program for FrontFlow/blue(FFB).
 
 ## Description
@@ -13,13 +11,17 @@ pandas
 matplotlib
 
 ## Usage
+```
 import ffbutil as fb
+```
 
 ## Install
+```
 pip install git+https://github.com/YuyaM/ffbutil
+```
 
 ## Licence
-This software is released under the MIT License, see LICENSE.txt
+This software is released under the MIT License, see LICENSE
 
 ## Author
 
