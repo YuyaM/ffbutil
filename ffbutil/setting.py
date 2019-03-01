@@ -1,3 +1,11 @@
+# -*- coding: utf-8 -*-
+##################################################
+# Copyright (c) [2019] [Yuya Miki]
+# 
+# This software is released under the MIT License.
+# http://opensource.org/licenses/mit-license.php
+##################################################
+
 import matplotlib.pyplot as plt
 
 # Font

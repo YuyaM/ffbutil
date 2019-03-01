@@ -1,4 +1,11 @@
 # -*- coding: utf-8 -*-
+##################################################
+# Copyright (c) [2019] [Yuya Miki]
+# 
+# This software is released under the MIT License.
+# http://opensource.org/licenses/mit-license.php
+##################################################
+
 """
 Created on Mon Jul 10 15:33:23 2017
 
