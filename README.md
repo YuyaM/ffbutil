@@ -14,6 +14,7 @@ matplotlib
 ```
 import ffbutil as fb
 ```
+You can find some example in sample folder.  
 
 ## Install
 ```
