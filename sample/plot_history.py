@@ -67,9 +67,9 @@ f1.read(file_input)
 # INLTFL      26   FLUX ON INLET BOUNDARY
 # OTLTFL      27   FLUX ON OUTLET BOUNDARY
 #
-f1.plot_other("FORC_Z", False)
-f1.plot_other("MAXDIV", False)
-f1.plot_other("OVSERR", False)
+f1.plot("FORC_Z", False)
+f1.plot("MAXDIV", False)
+f1.plot("OVSERR", False)
 
 #
 # You can calculate PSD(debug needed)

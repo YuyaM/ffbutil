@@ -9,8 +9,8 @@
 # FFB
 from .samplx    import samplx
 from .history   import history
-from .naca0012  import naca0012
+#from .naca0012  import naca0012
 from .parmles3x import parmles3x
-from .kth_data  import kth_data
+#from .kth_data  import kth_data
 # FFX
-from .historyFFX   import historyFFX
+#from .historyFFX   import historyFFX

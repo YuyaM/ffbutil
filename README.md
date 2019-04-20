@@ -7,6 +7,7 @@ This is the utility program for FrontFlow/blue(FFB).
 ## Requirement
 Python3  
 numpy  
+scipy  
 pandas  
 matplotlib
 
