@@ -28,7 +28,7 @@ parser.add_argument('--version',
 args = parser.parse_args()
 file_input = args.inputfile
 f1 = fb.history()
-f1.read(file_input)
+f1.read(file_input,1.0,1.0)
 #
 # You can specify points to plot.
 #
