@@ -17,8 +17,6 @@ Created on Mon Jul 10 15:33:23 2017
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-# from scipy import signal
-import scipy.signal
 ################################################################################
 
 
@@ -61,73 +59,174 @@ class history:
             "OTLTFL":      "27",
         }
 
+        self.keymean= {
+            "TIME":        "TIME                                  ",
+            "MAXDIV":      "MAXIMUM DIVERGENT                     ",
+            "AELMNU":      "AVERAGE ELEMENT EDDY VISCOSITY        ",
+            "PRSITR":      "ITERATIONS DONE FOR PRESSURE EQUATION ",
+            "PRSL2N":      "L2-NORM RESIDUAL OF PRESSURE EQUATION ",
+            "FORC_X":      "FLUID FORCE ACTING IN X DIRECTION ",
+            "FORC_Y":      "FLUID FORCE ACTING IN Y DIRECTION ",
+            "FORC_Z":      "FLUID FORCE ACTING IN Z DIRECTION ",
+            "UEQITR":      "ITERATIONS DONE FOR U-EQUATION    ",
+            "VEQITR":      "ITERATIONS DONE FOR V-EQUATION    ",
+            "WEQITR":      "ITERATIONS DONE FOR W-EQUATION    ",
+            "TEQITR":      "ITERATIONS DONE FOR T-EQUATION    ",
+            "KEQITR":      "ITERATIONS DONE FOR K-EQUATION    ",
+            "EEQITR":      "ITERATIONS DONE FOR E-EQUATION    ",
+            "UEQL2N":      "L2-NORM RESIDUAL OF U-EQUATION    ",
+            "VEQL2N":      "L2-NORM RESIDUAL OF V-EQUATION    ",
+            "WEQL2N":      "L2-NORM RESIDUAL OF W-EQUATION    ",
+            "TEQL2N":      "L2-NORM RESIDUAL OF T-EQUATION    ",
+            "KEQL2N":      "L2-NORM RESIDUAL OF K-EQUATION    ",
+            "EEQL2N":      "L2-NORM RESIDUAL OF E-EQUATION    ",
+            "TEMPVI":      "VOLUME INTEGRATION OF TEMPRATURE  ",
+            "OVSERR":      "MAX. OVERSET ERROR                ",
+            "TOTALV":      "TOTAL VOLUME OF FIRST FLUID       ",
+            "VF_MIN":      "MINIMUM VOLUME FRACTION           ",
+            "VF_MAX":      "MAXMUM VOLUME FRACTION            ",
+            "VOFCFL":      "MAXMUM COURANT NUMBER FOR VOF EQ. ",
+            "INLTFL":      "FLUX ON INLET BOUNDARY  ",
+            "OTLTFL":      "FLUX ON OUTLET BOUNDARY ",
+        }
 
 
-    def read(self, file_in):
+
+    def read(self, file_in, u00, l00):
         '''
         '''
         print("read HISTORY data. file=", file_in)
+        #
+        #
         self.f_in = file_in
+        self.u00 = u00
+        self.l00 = l00
         #
         # Magic number
+        # この変数はHISTORYファイルを出力する仕様によって決まる
+        # numSolverDefinedHeader : Header
+        # numSolverDefinedValue  : ソルバ定義されたデータ数
         #
-        skip1 = 5
-        row1 = 28
-        skip2 = skip1 + row1
-        self.skip = row1
+        numSolverDefinedHeader = 5
+        numSolverDefinedValue = 28
+        self.numSolverDefinedValue = numSolverDefinedValue
         #
         # READ FIRST COMMENTOUT ROWS NUMBER
-        #
+        # ヘッダの数の検索 : numOfDataHeader
+        # 記録されている時間ステップの検索 : numOfTimeStep
+        # ファイルを実際に開いて読み込みテストを行う
         f = open(self.f_in)
-        skip_row = 0
-        data_row = 0
+        numOfDataHeader = 0
+        numOfTimeStep = 0
         line = f.readline()
-        skip_row = skip_row + 1
-        print(skip_row, line.rstrip())
+        numOfDataHeader = numOfDataHeader + 1
+        print(numOfDataHeader, line.rstrip())
         while line:
             line = f.readline()
             if not line:
                 break
             if(line[0] == "#"):
-                skip_row = skip_row + 1
-                print(skip_row, line.rstrip())
+                numOfDataHeader = numOfDataHeader + 1
+                print(numOfDataHeader, line.rstrip())
+                criteriaData=line.split()
             else:
-                data_row = data_row + 1
+                numOfTimeStep = numOfTimeStep + 1
         f.close
-        print(skip_row,  data_row)
+        print("numOfDataHeader,numOfTimeStep is ", numOfDataHeader,  numOfTimeStep)
         #
-        # READ OTHERE VALUE
+        # READ default VALUE(Pre-defined Value)
         #
-        f1 = pd.read_csv(self.f_in, header=None, skiprows=skip1, nrows=row1, sep='#', skipinitialspace=True)
+        preDefineHeader = pd.read_csv(self.f_in, header=None, skiprows=numSolverDefinedHeader, nrows=numSolverDefinedValue, sep='#', skipinitialspace=True)
         #
         # READ POTISION
         #
-        # row2 is data lenght
-        row2 = skip_row - (skip1 + row1)
-        col_names = ['#', 'dir', ';', 'X', 'Xvalue', 'Y', 'Yvalue', 'Z', 'Zvalue']
-        f2 = pd.read_csv(self.f_in, header=None, skiprows=skip2, nrows=row2, names=col_names, skipinitialspace=True, delim_whitespace=True)
-        f2 = f2.drop(['#', ';', 'X', 'Y', 'Z'], axis=1)
-        f2 = f2.reset_index(drop=True)
+        # numUserDefinedValue is data lenght
+        numUserDefinedValue = numOfDataHeader - (numSolverDefinedHeader + numSolverDefinedValue)
+        if(len(criteriaData) == 9):
+            col_names = ['#', 'dir', ';', 'X', 'Xvalue', 'Y', 'Yvalue', 'Z', 'Zvalue']
+            flagSplit = 0
+            flagNoUserDefinedData = 0
+        elif(len(criteriaData) == 6):
+            col_names = ['#', 'dir', ';', 'XV', 'YV', 'ZV']
+            flagSplit = 1
+            flagNoUserDefinedData = 0
+        elif(len(criteriaData) == 2):
+            flagNoUserDefinedData = 1
+        else:
+            flagNoUserDefinedData = 1
+            pass
+        if(flagNoUserDefinedData == 0):
+            userDefinedHeader = pd.read_csv(self.f_in, header=None, \
+                                            skiprows=numSolverDefinedHeader + numSolverDefinedValue, \
+                                            nrows=numUserDefinedValue, \
+                                            names=col_names, \
+                                            skipinitialspace=True, \
+                                            delim_whitespace=True)
+            if(flagSplit == 0):
+                userDefinedHeader = userDefinedHeader.drop(['#', ';', 'X', 'Y', 'Z'], axis=1)
+                userDefinedHeader = userDefinedHeader.reset_index(drop=True)
+            else:
+                userDefinedHeader = userDefinedHeader.drop(['#', ';'], axis=1)
+                userDefinedHeader = userDefinedHeader.reset_index(drop=True)
+                userDefinedHeader["Xvalue"] = userDefinedHeader["XV"].str.split("=", expand=True)[1].astype(float)
+                userDefinedHeader["Yvalue"] = userDefinedHeader["YV"].str.split("=", expand=True)[1].astype(float)
+                userDefinedHeader["Zvalue"] = userDefinedHeader["ZV"].str.split("=", expand=True)[1].astype(float)
+                userDefinedHeader = userDefinedHeader.drop(['XV', 'YV', 'ZV'], axis=1)
+                userDefinedHeader = userDefinedHeader.reset_index(drop=True)
+            #
+            # READ DATA
+            #
+            print(self.numSolverDefinedValue, numUserDefinedValue)
 
-        #
-        # READ DATA
-        #
-        print(self.skip, row2)
-
-        f3 = pd.read_csv(self.f_in, header=None, skiprows=skip_row, skipinitialspace=True, delim_whitespace=True)
-        # f3 = f3.drop(np.arange(row1), axis=1)
-        f3 = f3.T
-        f3 = f3.reset_index(drop=True)
+        # 時系列データ
+        timeSeries = pd.read_csv(self.f_in, header=None, skiprows=numOfDataHeader, skipinitialspace=True, delim_whitespace=True)
+        # timeSeries = timeSeries.drop(np.arange(numSolverDefinedValue), axis=1)
+        timeSeries = timeSeries.T
+        timeSeries = timeSeries.reset_index(drop=True)
 
         #
         # self
         #
-        self.f_other = f1
-        self.f_data = f2
-        self.output = f3
-        self.NTIME = len(f3.columns)
+        self.preDefinedHeader = preDefineHeader
+        if(flagNoUserDefinedData == 0):
+            self.userDefinedHeader = userDefinedHeader
+        self.numUserDefinedValue = numUserDefinedValue
+        self.timeSeries = timeSeries
+        self.NTIME = len(timeSeries.columns)
+        nti = int(self.keyword.get("TIME", '01'))
+        time=self.timeSeries.loc[nti, :] * (l00 / u00) 
+        nfx = int(self.keyword.get("FORC_X", '01'))
+        nfy = int(self.keyword.get("FORC_Y", '01'))
+        nfz = int(self.keyword.get("FORC_Z", '01'))
+        fx=self.timeSeries.loc[nfx, :] * (u00 * u00) 
+        fy=self.timeSeries.loc[nfy, :] * (u00 * u00) 
+        fz=self.timeSeries.loc[nfz, :] * (u00 * u00) 
+        self.timeSeries.loc[nti, :] = time
+        self.timeSeries.loc[nfx, :] = fx
+        self.timeSeries.loc[nfy, :] = fy
+        self.timeSeries.loc[nfz, :] = fz
+        self.time=timeSeries.loc[0, :]
 
-    def plot(self, num, flaglog):
+        if(flagNoUserDefinedData == 0):
+            # 有次元化
+            for i in range(np.size(userDefinedHeader.dir)):
+              n = i+1
+              number = n + self.numSolverDefinedValue - 1
+              if(userDefinedHeader["dir"][i] == "PRESSURE"):
+                  tmp=self.timeSeries.loc[number, :] * (u00 * u00) 
+                  self.timeSeries.loc[number, :] = tmp
+              elif(userDefinedHeader["dir"][i] == "VELOCITY-U"):
+                  tmp=self.timeSeries.loc[number, :] * (u00) 
+                  self.timeSeries.loc[number, :] = tmp
+              elif(userDefinedHeader["dir"][i] == "VELOCITY-V"):
+                  tmp=self.timeSeries.loc[number, :] * (u00) 
+                  self.timeSeries.loc[number, :] = tmp
+              elif(userDefinedHeader["dir"][i] == "VELOCITY-W"):
+                  tmp=self.timeSeries.loc[number, :] * (u00) 
+                  self.timeSeries.loc[number, :] = tmp
+
+
+    def plot(self, num, flaglog, **kwargs):
         '''
         plot(num, flaglog):
         This function can plot initially defined value and
@@ -172,142 +271,66 @@ class history:
         '''
         if type(num) is str:
             number = int(self.keyword.get(num, '01'))
-            title = self.f_other[1][number]
+            title = self.preDefinedHeader[1][number]
+            nlabel = self.keymean.get(num, 'EMPTY')
         elif type(num) is int:
-            number = num + self.skip - 1
-            title = self.f_data['dir'][num - 1]
+            number = num + self.numSolverDefinedValue - 1
+            title = self.userDefinedHeader['dir'][num - 1]
+            nlabel = title
+            xval = str(self.userDefinedHeader['Xvalue'][num - 1])
+            yval = str(self.userDefinedHeader['Yvalue'][num - 1])
+            zval = str(self.userDefinedHeader['Zvalue'][num - 1])
+            title = "X=" + xval + "Y=" + yval + "Z=" + zval
         else:
             print('type of num need number or char.')
 
         try:
-            plt.plot(self.output.loc[0, :], self.output.loc[number, :], '-ok')
+            plt.plot(self.timeSeries.loc[0, :], self.timeSeries.loc[number, :], '-k')
             if(flaglog):
                 plt.xscale('log')
                 plt.yscale('log')
             plt.title(title)
-            plt.show()
+            if(len(kwargs) == 2):
+              print("yes")
+              xlabel = kwargs.get("xaxis", '1')
+              ylabel = kwargs.get("yaxis", '1')
+              plt.xlabel(xlabel)
+              plt.ylabel(ylabel)
+            else:
+              plt.xlabel("Time [-]")
+              plt.ylabel(nlabel)
+
+            if type(num) is str:
+
+                plt.savefig("fig" + num + ".png", bbox_inches="tight", pad_inches=0.05)
+            elif type(num) is int:
+                plt.savefig("figPoint" + str(num) + ".png", bbox_inches="tight", pad_inches=0.05)
+            plt.clf()
         except ValueError as error:
             print(error)
 
-    # def plot(self, num, flaglog):
-    #     '''
-    #     plot(num, flaglog):
-    #     This function can plot user-specified point value
 
-    #     self.output.loc[0, :] is time
-    #     num is number of point which you want to plot (1 ~).
-
-    #     '''
-    #     print(num + self.skip - 1)
-    #     try:
-    #         plt.plot(self.output.loc[0, :], self.output.loc[num + self.skip - 1, :], '-ok')
-    #         if(flaglog):
-    #             plt.xscale('log')
-    #             plt.yscale('log')
-    #         print(self.f_data['dir'][num - 1])
-    #         title = self.f_data['dir'][num - 1]
-    #         plt.title(title)
-    #         plt.show()
-    #     except ValueError as error:
-    #         print(error)
-
-    def do_FFT(self, num1, U):
-        print("NTIME is ", self.NTIME)
-        t = self.output.loc[0, :]
-        # Y1
-        y1 = self.output.loc[num1 + self.skip - 1, :]
-        average = np.mean(y1)
-        yf1 = y1 - average
-        yfcorr1 = np.correlate(y1, y1, 'same')
-        n = self.NTIME
-        dt = t[1] - t[0]
-        freq = np.linspace(0, 1.0 / dt, n)
-        wave_n = 2.0 * np.pi * freq / U
-        F1 = np.fft.fft(yfcorr1)
-        return wave_n, F1
-
-    def calc_FFT(self, num1, num2, num3, U):
-        w1, f1 = self.do_FFT(num1, U)
-        w2, f2 = self.do_FFT(num2, U)
-        w3, f3 = self.do_FFT(num3, U)
-        e = f1 + f2 + f3
-        k = np.sqrt(w1**2 + w2**2 + w3**2)
-        # FIGURE
-        plt.figure()
-        plt.plot(k, e, '-ok', label='|F(k)|')
-        # plt.xlim([0, max(k) / 2])
-        plt.legend(loc="upper right")
-        plt.xlabel("Wave number")
-        plt.ylabel("Amp")
-        plt.xscale('symlog')
-        plt.yscale('symlog')
-        plt.show()
-
-    def calc_autoCOR(self, num1):
-        t = self.output.loc[0, :]
-        n = self.NTIME
-        dt = t[1] - t[0]
-        freq = np.linspace(0, 1.0 / dt, n)
-        wave_n = 2.0 * np.pi * freq / 1.0
-        # Y1
-        y1 = np.array(self.output.loc[num1 + self.skip - 1, :])
-        average = np.mean(y1, axis=0)
-        print("average", average)
-        yf1 = y1 - average
-        yfcorr1 = np.correlate(y1, y1, 'same')
-        yfcorr1 = yfcorr1 / yfcorr1[0]
-        print(yfcorr1)
-        # FIGURE
-        plt.figure()
-        plt.plot(wave_n, yfcorr1, 'ok', label='|F(k)|')
-        plt.legend(loc="upper right")
-        plt.xlabel("wave number")
-        plt.ylabel("R_ii")
-        plt.xscale('symlog')
-        plt.show()
-
-    def calc_PSD(self, num):
-        '''
-        calc_PSD(num):
-        This function can calculate Power Spectrum Density (PSD).
-        You can specify the data-source of the function by "num" variable.
-        If "num" is string, this function search the string from the keyword.
-        If "num" is integer, this function use data from the user-specified data.
-        '''
+    def getvalue(self, num):
         if type(num) is str:
             number = int(self.keyword.get(num, '01'))
+            title = self.preDefinedHeader[1][number]
         elif type(num) is int:
-            number = num + self.skip - 1
+            number = num + self.numSolverDefinedValue - 1
+            title = self.userDefinedHeader['dir'][num - 1]
         else:
             print('type of num need number or char.')
-        try:
-            nperseg_default = 256
-            print("NTIME is ", self.NTIME)
-            print("Default overlap is ", self.NTIME / nperseg_default)
-            t = self.output.loc[0, :]
-            y = self.output.loc[number, :]
-            n = self.NTIME
-            dt = t[1] - t[0]
-            fs = 1 / dt
-            #
-            freq1, P1 = scipy.signal.periodogram(y, fs)
-            freq2, P2 = scipy.signal.welch(y, fs, nperseg=nperseg_default, window="hann")
-            freq3, P3 = scipy.signal.welch(y, fs, nperseg=n / 2,           window="hann")
-            freq4, P4 = scipy.signal.welch(y, fs, nperseg=n / 8,           window="hann")
-            #
-            plt.figure()
-            plt.plot(freq1, 10 * np.log10(P1), "-b",              label="periodogram")
-            plt.plot(freq2, 10 * np.log10(P2), "-r", linewidth=2, label="nseg=256")
-            plt.plot(freq3, 10 * np.log10(P3), "-c", linewidth=2, label="nseg=512")
-            plt.plot(freq4, 10 * np.log10(P4), "-y", linewidth=2, label="nseg=128")
-            plt.legend(loc="upper right")
-            plt.xlabel("Frequency[Hz]")
-            plt.ylabel("Power/frequency[dB/Hz]")
-            # plt.xlim([20, max(freq2) / 2])
-            plt.xscale('log')
-            plt.show()
-            df = 1 / dt / n
-            rms = np.sqrt(np.sum(P2) * df)
-            print("RMS is ", rms)
-        except ValueError as error:
-            print(error)
+
+        return np.array(self.timeSeries.loc[number, :])
+
+    def getvalues(self, num1, num2):
+        if type(num1) is int:
+            number1 = num1 + self.numSolverDefinedValue - 1
+            number2 = num2 + self.numSolverDefinedValue - 1
+            title = self.userDefinedHeader['dir'][num1 - 1]
+            xval = self.userDefinedHeader['Xvalue'][num1 - 1 : num2]
+            yval = self.userDefinedHeader['Yvalue'][num1 - 1 : num2]
+            zval = self.userDefinedHeader['Zvalue'][num1 - 1 : num2]
+        else:
+            print('type of num need number or char.')
+
+        return xval, yval, zval, np.array(self.output.loc[number1:number2, :])
