@@ -1,6 +1,6 @@
 ffbutil
 ====
-This is the utility program for FrontFlow/blue(FFB).
+This is the utility program for FFB.
 
 ## Description
 
