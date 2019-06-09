@@ -70,18 +70,3 @@ f1.read(file_input)
 f1.plot("FORC_Z", False)
 f1.plot("MAXDIV", False)
 f1.plot("OVSERR", False)
-
-#
-# You can calculate PSD(debug needed)
-#
-# f1.calc_PSD(1)
-
-#
-# You can calculate auto-Correlation(debug needed)
-#
-# f1.calc_autoCOR(1)
-
-#
-# You can calculate FFT(no debug  needed)
-#
-# f1.calc_FFT(1, 2, 3, 1.0)
