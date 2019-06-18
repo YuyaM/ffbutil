@@ -4,6 +4,9 @@ This is the utility program for FFB.
 
 ## Description
 
+## Demo
+「![Gif](https://raw.githubusercontent.com/wiki/YuyaM/ffbutil/demo.gif)」
+
 ## Requirement
 Python3  
 numpy  
