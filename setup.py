@@ -12,7 +12,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='ffbutil',
-    version='0.7.1',
+    version='0.7.2',
     description='Utility program package for FrontFlow/Blue',
     long_description=long_description,
     url='https://github.com/YuyaM/ffbutil',

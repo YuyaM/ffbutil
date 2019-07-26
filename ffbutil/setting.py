@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 line_of_axes = 1.0
 plt.rcParams.update({
     'axes.grid': True,
-    'font.family': 'Arial',
-    'font.size': 12.0,
+    'font.family': 'sans-serif',
+    'font.size': 8.0,
     'grid.linestyle': '--',
     'grid.linewidth': 0.5,
     'legend.edgecolor': 'black',
