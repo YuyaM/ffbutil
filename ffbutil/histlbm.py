@@ -6,6 +6,7 @@
 # http://opensource.org/licenses/mit-license.php
 ##################################################
 
+from history import history
 
 class histlbm(history):
     '''
