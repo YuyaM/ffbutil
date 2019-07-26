@@ -29,5 +29,5 @@ class histlbm(history):
         # numSolverDefinedHeader : Header
         # numSolverDefinedValue  : ソルバ定義されたデータ数
         #
-        numSolverDefinedHeader = 1
-        numSolverDefinedValue = 1
+        self.numSolverDefinedHeader = 1
+        self.numSolverDefinedValue = 1

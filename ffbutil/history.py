@@ -95,8 +95,8 @@ class history:
         # numSolverDefinedHeader : Header
         # numSolverDefinedValue  : ソルバ定義されたデータ数
         #
-        numSolverDefinedHeader = 5
-        numSolverDefinedValue = 28
+        self.numSolverDefinedHeader = 5
+        self.numSolverDefinedValue = 28
 
 
     def read(self, file_in, u00, l00):
@@ -108,7 +108,6 @@ class history:
         self.f_in = file_in
         self.u00 = u00
         self.l00 = l00
-        self.numSolverDefinedValue = numSolverDefinedValue
         #
         # READ FIRST COMMENTOUT ROWS NUMBER
         # ヘッダの数の検索 : numOfDataHeader
@@ -135,12 +134,12 @@ class history:
         #
         # READ default VALUE(Pre-defined Value)
         #
-        preDefineHeader = pd.read_csv(self.f_in, header=None, skiprows=numSolverDefinedHeader, nrows=numSolverDefinedValue, sep='#', skipinitialspace=True)
+        preDefineHeader = pd.read_csv(self.f_in, header=None, skiprows=self.numSolverDefinedHeader, nrows=self.numSolverDefinedValue, sep='#', skipinitialspace=True)
         #
         # READ POTISION
         #
         # numUserDefinedValue is data lenght
-        numUserDefinedValue = numOfDataHeader - (numSolverDefinedHeader + numSolverDefinedValue)
+        numUserDefinedValue = numOfDataHeader - (self.numSolverDefinedHeader + self.numSolverDefinedValue)
         if(len(criteriaData) == 9):
             col_names = ['#', 'dir', ';', 'X', 'Xvalue', 'Y', 'Yvalue', 'Z', 'Zvalue']
             flagSplit = 0
@@ -156,7 +155,7 @@ class history:
             pass
         if(flagNoUserDefinedData == 0):
             userDefinedHeader = pd.read_csv(self.f_in, header=None, \
-                                            skiprows=numSolverDefinedHeader + numSolverDefinedValue, \
+                                            skiprows=self.numSolverDefinedHeader + self.numSolverDefinedValue, \
                                             nrows=numUserDefinedValue, \
                                             names=col_names, \
                                             skipinitialspace=True, \

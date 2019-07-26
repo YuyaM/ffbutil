@@ -41,5 +41,5 @@ class surface(history):
         # numSolverDefinedHeader : Header
         # numSolverDefinedValue  : ソルバ定義されたデータ数
         #
-        numSolverDefinedHeader = 1
-        numSolverDefinedValue = 7
+        self.numSolverDefinedHeader = 1
+        self.numSolverDefinedValue = 7
