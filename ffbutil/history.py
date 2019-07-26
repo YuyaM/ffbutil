@@ -89,7 +89,14 @@ class history:
             "INLTFL":      "FLUX ON INLET BOUNDARY  ",
             "OTLTFL":      "FLUX ON OUTLET BOUNDARY ",
         }
-
+        #
+        # Magic number
+        # この変数はHISTORYファイルを出力する仕様によって決まる
+        # numSolverDefinedHeader : Header
+        # numSolverDefinedValue  : ソルバ定義されたデータ数
+        #
+        numSolverDefinedHeader = 5
+        numSolverDefinedValue = 28
 
 
     def read(self, file_in, u00, l00):
@@ -101,14 +108,6 @@ class history:
         self.f_in = file_in
         self.u00 = u00
         self.l00 = l00
-        #
-        # Magic number
-        # この変数はHISTORYファイルを出力する仕様によって決まる
-        # numSolverDefinedHeader : Header
-        # numSolverDefinedValue  : ソルバ定義されたデータ数
-        #
-        numSolverDefinedHeader = 5
-        numSolverDefinedValue = 28
         self.numSolverDefinedValue = numSolverDefinedValue
         #
         # READ FIRST COMMENTOUT ROWS NUMBER
@@ -333,4 +332,4 @@ class history:
         else:
             print('type of num need number or char.')
 
-        return xval, yval, zval, np.array(self.output.loc[number1:number2, :])
+        return xval, yval, zval, np.array(self.timeSeries.loc[number1:number2, :])
