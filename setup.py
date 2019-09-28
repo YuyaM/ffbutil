@@ -19,7 +19,7 @@ setup(
     author='YuyaM',
     author_email='',
     license='MIT',
-    install_requires=['numpy', 'pandas', 'matplotlib'],
+    install_requires=['numpy', 'scipy', 'pandas', 'matplotlib'],
     keywords='ffbutil',
     packages=find_packages(),
     classifiers=[
