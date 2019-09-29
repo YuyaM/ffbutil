@@ -283,7 +283,9 @@ class history:
             print('type of num need number or char.')
 
         try:
-            plt.plot(self.timeSeries.loc[0, :], self.timeSeries.loc[number, :], '-k')
+            # self.timeSeries.loc[0,:] becomes zero when calculation diverged.
+            notzero = (self.timeSeries.loc[0, :] != 0.0)
+            plt.plot(self.timeSeries.loc[0, :][notzero], self.timeSeries.loc[number, :][notzero], '-k')
             if(flaglog):
                 plt.xscale('log')
                 plt.yscale('log')

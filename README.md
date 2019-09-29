@@ -22,7 +22,7 @@ You can find some example in sample folder.
 
 ## Install
 ```
-pip install git+https://github.com/YuyaM/ffbutil
+pip3 install git+https://github.com/YuyaM/ffbutil
 ```
 
 ## Licence
