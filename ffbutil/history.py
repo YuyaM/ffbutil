@@ -119,6 +119,8 @@ class history:
         line = f.readline()
         numOfDataHeader = numOfDataHeader + 1
         print(numOfDataHeader, line.rstrip())
+        criteriaMax = 0
+
         while line:
             line = f.readline()
             if not line:
@@ -127,6 +129,8 @@ class history:
                 numOfDataHeader = numOfDataHeader + 1
                 print(numOfDataHeader, line.rstrip())
                 criteriaData=line.split()
+                if(len(criteriaData) > criteriaMax):
+                    criteriaMax = len(criteriaData)
             else:
                 numOfTimeStep = numOfTimeStep + 1
         f.close
@@ -140,15 +144,37 @@ class history:
         #
         # numUserDefinedValue is data lenght
         numUserDefinedValue = numOfDataHeader - (self.numSolverDefinedHeader + self.numSolverDefinedValue)
-        if(len(criteriaData) == 9):
+
+        f = open(self.f_in)
+        line = f.readline()
+        columnList = ['dir', 'Xvalue', 'Yvalue', 'Zvalue']
+        workHeader = pd.DataFrame(index=[], columns=columnList)
+        icount = 1
+        while line:
+            line = f.readline()
+            if not line:
+                break
+            if(line[0] == "#"):
+                icount = icount + 1
+                if(icount > (self.numSolverDefinedHeader + self.numSolverDefinedValue)):
+                    istr = str(numOfDataHeader - 1)
+                    tmp = pd.DataFrame([[line[3:13], line[22:32], line[37:47], line[52:].strip("\n")]],columns=columnList)
+                    workHeader = workHeader.append(tmp,ignore_index=True)
+        f.close
+
+        if(criteriaMax == 10):
+            print("use Own Defined Header")
+            flagSplit = 0
+            flagNoUserDefinedData = -1
+        elif(criteriaMax == 9):
             col_names = ['#', 'dir', ';', 'X', 'Xvalue', 'Y', 'Yvalue', 'Z', 'Zvalue']
             flagSplit = 0
             flagNoUserDefinedData = 0
-        elif(len(criteriaData) == 6):
+        elif(criteriaMax == 6):
             col_names = ['#', 'dir', ';', 'XV', 'YV', 'ZV']
             flagSplit = 1
             flagNoUserDefinedData = 0
-        elif(len(criteriaData) == 2):
+        elif(criteriaMax == 2):
             flagNoUserDefinedData = 1
         else:
             flagNoUserDefinedData = 1
@@ -176,6 +202,10 @@ class history:
             #
             print(self.numSolverDefinedValue, numUserDefinedValue)
 
+        elif(flagNoUserDefinedData == -1):
+            userDefinedHeader = workHeader
+            self.userDefinedHeader = userDefinedHeader.reset_index(drop=True)
+            print(userDefinedHeader)
         # 時系列データ
         timeSeries = pd.read_csv(self.f_in, header=None, skiprows=numOfDataHeader, skipinitialspace=True, delim_whitespace=True)
         # timeSeries = timeSeries.drop(np.arange(numSolverDefinedValue), axis=1)
