@@ -16,6 +16,8 @@ Created on Mon Jul 10 15:33:23 2017
 ################################################################################
 import numpy as np
 import pandas as pd
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 ################################################################################
 
