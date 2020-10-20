@@ -73,9 +73,18 @@ class parmles3x:
         print('Restart flag       : {} '.format(ISTART))
         print('Viscosity (/nu)    : {viscosity} '.format(viscosity=VISCM))
         print('Number of step     : {} '.format(NTIME))
-        print('Restart flag       : {} '.format(ISTART))
         print('Time per step (dt) : {} '.format(DT))
         print('Number of sampling : {} '.format(num))
+        self.itrans = ITRANS
+        self.imodel = IMODEL
+        self.iform  = IFORM
+        self.ipress = IPRESS
+        self.fsmach = FSMACH
+        self.istart = ISTART
+        self.viscm  = VISCM
+        self.ntime  = NTIME
+        self.dt     = DT
+        self.num    = NUM
         self.f_data = pd.DataFrame(data)
         self.f_data.columns = ["dir", "x", "y", "z"]
         self.f_data = self.f_data.drop_duplicates(["x", "y", "z"])
@@ -95,3 +104,34 @@ class parmles3x:
         # directions 'x', 'y', 'z'
         '''
         return self.f_data[directions]
+
+    def get_itrans():
+        return self.itrans
+
+    def get_imodel():
+        return self.imodel
+
+    def get_iform():
+        return self.iform
+
+    def get_ipress():
+        return self.ipress
+
+    def get_fsmach():
+        return self.fsmach
+
+    def get_istart():
+        return self.istart
+
+    def get_viscm():
+        return self.viscm
+
+    def get_ntime():
+        return self.ntime
+
+    def get_dt():
+        return self.dt
+
+    def get_num():
+        return self.num
+
