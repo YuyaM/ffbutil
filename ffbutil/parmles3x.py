@@ -84,7 +84,7 @@ class parmles3x:
         self.viscm  = VISCM
         self.ntime  = NTIME
         self.dt     = DT
-        self.num    = NUM
+        self.num    = num
         self.f_data = pd.DataFrame(data)
         self.f_data.columns = ["dir", "x", "y", "z"]
         self.f_data = self.f_data.drop_duplicates(["x", "y", "z"])
