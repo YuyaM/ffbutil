@@ -105,33 +105,33 @@ class parmles3x:
         '''
         return self.f_data[directions]
 
-    def get_itrans():
+    def get_itrans(self):
         return self.itrans
 
-    def get_imodel():
+    def get_imodel(self):
         return self.imodel
 
-    def get_iform():
+    def get_iform(self):
         return self.iform
 
-    def get_ipress():
+    def get_ipress(self):
         return self.ipress
 
-    def get_fsmach():
+    def get_fsmach(self):
         return self.fsmach
 
-    def get_istart():
+    def get_istart(self):
         return self.istart
 
-    def get_viscm():
+    def get_viscm(self):
         return self.viscm
 
-    def get_ntime():
+    def get_ntime(self):
         return self.ntime
 
-    def get_dt():
+    def get_dt(self):
         return self.dt
 
-    def get_num():
+    def get_num(self):
         return self.num
 
