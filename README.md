@@ -1,6 +1,6 @@
 ffbutil
 ====
-This is the utility program for FFB.
+This is a utility program for FFB History file.
 
 ## Description
 
