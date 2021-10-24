@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ##################################################
-# Copyright (c) [2019] [Yuya Miki]
+# Copyright (c) [2019-2021] [Yuya Miki]
 # 
 # This software is released under the MIT License.
 # http://opensource.org/licenses/mit-license.php
@@ -18,10 +18,14 @@ class histlbm(history):
         # print("W,H", width, height)
         self.keyword = {
             "TIME":       "00",
+            "MAXRHO":       "01",
+            "MAXVEL":       "02",
         }
 
         self.keymean= {
             "TIME":       "TIME                              ",
+            "MAXRHO":     "MAXIMUM DENSITY                   ",
+            "MAXVEL":     "MAXIMUM VELOCITY                  ",
         }
         #
         # Magic number
@@ -30,4 +34,4 @@ class histlbm(history):
         # numSolverDefinedValue  : ソルバ定義されたデータ数
         #
         self.numSolverDefinedHeader = 1
-        self.numSolverDefinedValue = 1
+        self.numSolverDefinedValue = 3
