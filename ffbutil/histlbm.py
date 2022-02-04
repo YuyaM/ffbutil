@@ -18,14 +18,20 @@ class histlbm(history):
         # print("W,H", width, height)
         self.keyword = {
             "TIME":       "00",
-            "MAXRHO":       "01",
-            "MAXVEL":       "02",
+            "MAXRHO":     "01",
+            "MAXVEL":     "02",
+            "FORC_X":     "03",
+            "FORC_Y":     "04",
+            "FORC_Z":     "05",
         }
 
         self.keymean= {
             "TIME":       "TIME                              ",
             "MAXRHO":     "MAXIMUM DENSITY                   ",
             "MAXVEL":     "MAXIMUM VELOCITY                  ",
+            "FORC_X":      "FLUID FORCE ACTING IN X DIRECTION ",
+            "FORC_Y":      "FLUID FORCE ACTING IN Y DIRECTION ",
+            "FORC_Z":      "FLUID FORCE ACTING IN Z DIRECTION ",
         }
         #
         # Magic number
