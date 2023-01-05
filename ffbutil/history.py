@@ -161,7 +161,8 @@ class history:
                 if(icount > (self.numSolverDefinedHeader + self.numSolverDefinedValue)):
                     istr = str(numOfDataHeader - 1)
                     tmp = pd.DataFrame([[line[3:13], line[22:32], line[37:47], line[52:].strip("\n")]],columns=columnList)
-                    workHeader = workHeader.append(tmp,ignore_index=True)
+                    #workHeader = workHeader.append(tmp,ignore_index=True)
+                    workHeader = pd.concat([workHeader,tmp])
         f.close
 
         if(criteriaMax == 10):
