@@ -43,5 +43,5 @@ class histlbm(history):
         # numSolverDefinedHeader : Header
         # numSolverDefinedValue  : ソルバ定義されたデータ数
         #
-        self.numSolverDefinedHeader = 1
+        self.numSolverDefinedHeader = 3
         self.numSolverDefinedValue = 8
