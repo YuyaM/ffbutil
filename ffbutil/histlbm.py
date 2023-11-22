@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ##################################################
-# Copyright (c) [2019-2021] [Yuya Miki]
+# Copyright (c) [2019-2023] [Yuya Miki]
 # 
 # This software is released under the MIT License.
 # http://opensource.org/licenses/mit-license.php
@@ -23,15 +23,19 @@ class histlbm(history):
             "FORC_X":     "03",
             "FORC_Y":     "04",
             "FORC_Z":     "05",
+            "MINRHO":     "06",
+            "NUMFLT":     "07",
         }
 
         self.keymean= {
             "TIME":       "TIME                              ",
             "MAXRHO":     "MAXIMUM DENSITY                   ",
             "MAXVEL":     "MAXIMUM VELOCITY                  ",
-            "FORC_X":      "FLUID FORCE ACTING IN X DIRECTION ",
-            "FORC_Y":      "FLUID FORCE ACTING IN Y DIRECTION ",
-            "FORC_Z":      "FLUID FORCE ACTING IN Z DIRECTION ",
+            "FORC_X":     "FLUID FORCE ACTING IN X DIRECTION ",
+            "FORC_Y":     "FLUID FORCE ACTING IN Y DIRECTION ",
+            "FORC_Z":     "FLUID FORCE ACTING IN Z DIRECTION ",
+            "MINRHO":     "MINIMUM DENSITY                   ",
+            "NUMFLT":     "NUM OF CUBES FILTERD IN A STEP    ",
         }
         #
         # Magic number
@@ -40,4 +44,4 @@ class histlbm(history):
         # numSolverDefinedValue  : ソルバ定義されたデータ数
         #
         self.numSolverDefinedHeader = 1
-        self.numSolverDefinedValue = 3
+        self.numSolverDefinedValue = 8
