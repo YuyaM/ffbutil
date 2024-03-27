@@ -353,7 +353,7 @@ class history:
         else:
             print('type of num need number or char.')
 
-        return np.array(self.timeSeries.loc[number, :], dtype=np.float)
+        return np.array(self.timeSeries.loc[number, :], dtype=float)
 
     def getvalues(self, num1, num2):
         if type(num1) is int:
@@ -366,7 +366,7 @@ class history:
         else:
             print('type of num need number or char.')
 
-        return np.array(xval, dtype=np.float), \
-               np.array(yval, dtype=np.float), \
-               np.array(zval, dtype=np.float), \
-               np.array(self.timeSeries.loc[number1:number2, :], dtype=np.float)
+        return np.array(xval, dtype=float), \
+               np.array(yval, dtype=float), \
+               np.array(zval, dtype=float), \
+               np.array(self.timeSeries.loc[number1:number2, :], dtype=float)
